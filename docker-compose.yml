@@ -8,5 +8,6 @@ services:
       - 'KAFKA_GROUP_ID=${KAFKA_GROUP_ID}' 
       - 'KAFKA_MOTION_TOPIC=${KAFKA_MOTION_TOPIC}'
       - 'DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}'
+      - 'MOTION_ALARM_STR=${MOTION_ALARM_STR}'
     deploy:
       replicas: 1
