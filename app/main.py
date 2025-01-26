@@ -1,13 +1,12 @@
 from kafka_handler import (
     KafkaConfig,
-    setup_kafka_consumer,
-    setup_kafka_producer,
-    send_kafka_message,
+    setup_kafka_consumer
 )
 import requests
 import logging
 import os
 import datetime
+import json
 
 # setup logging
 logging.basicConfig(level=logging.INFO)
@@ -43,11 +42,22 @@ def check_if_motion_alarm(timestamp: float) -> bool:
         return False
     
     # convert the timestamp to a datetime object
-    dt = datetime.fromtimestamp(timestamp)
+    dt = datetime.datetime.fromtimestamp(timestamp)
     
     # check if the time is between 8pm and 6am
     if dt.hour >= 20 or dt.hour < 6:
         return True
+
+def extract_data(message) -> tuple:
+    # Get the json string and format it to json
+    message = message.value["message"]
+    json_message = json.loads(message)
+    
+    # get the data from the json message
+    timestamp = json_message["timestamp"]
+    motion_detected = json_message["motion_detected"]
+    return timestamp,motion_detected
+            
 
 def main() -> None:
     # set up Kafka consumer
@@ -58,12 +68,13 @@ def main() -> None:
         # log the received message
         logging.info(f"Received message: {message.topic} -> {message.value}")
 
-        # get the timestamp from the message
-        timestamp = message["timestamp"]
+        # get the data from the message
+        timestamp, motion_detected = extract_data(message)
         
         # check if a motion alarm should be sent
-        if check_if_motion_alarm(timestamp):
+        if motion_detected and check_if_motion_alarm(timestamp):
             send_motion_alarm()
-            
+
+
 if __name__ == "__main__":
     main()
