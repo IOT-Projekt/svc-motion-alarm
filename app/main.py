@@ -6,7 +6,6 @@ import requests
 import logging
 import os
 import datetime
-import json
 
 # setup logging
 logging.basicConfig(level=logging.INFO)
@@ -49,13 +48,9 @@ def check_if_motion_alarm(timestamp: float) -> bool:
         return True
 
 def extract_data(message) -> tuple:
-    # Get the json string and format it to json
-    message = message.value["message"]
-    json_message = json.loads(message)
-    
     # get the data from the json message
-    timestamp = json_message["timestamp"]
-    motion_detected = json_message["motion_detected"]
+    timestamp = message["timestamp"]
+    motion_detected = message["motion_detected"]
     return timestamp,motion_detected
             
 
@@ -69,7 +64,7 @@ def main() -> None:
         logging.info(f"Received message: {message.topic} -> {message.value}")
 
         # get the data from the message
-        timestamp, motion_detected = extract_data(message)
+        timestamp, motion_detected = extract_data(message.value)
         
         # check if a motion alarm should be sent
         if motion_detected and check_if_motion_alarm(timestamp):
