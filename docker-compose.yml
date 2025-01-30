@@ -11,5 +11,6 @@ services:
       - 'MOTION_ALARM_STR=${MOTION_ALARM_STR}'
       - 'MOTION_ALARM_UPPER_BOUND=${MOTION_ALARM_UPPER_BOUND}'
       - 'MOTION_ALARM_LOWER_BOUND=${MOTION_ALARM_LOWER_BOUND}'
+      - TZ=Europe/Berlin
     deploy:
       replicas: 1
