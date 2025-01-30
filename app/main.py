@@ -14,6 +14,8 @@ logging.basicConfig(level=logging.INFO)
 KAFKA_MOTION_TOPIC = os.getenv("KAFKA_MOTION_TOPIC", "motion")
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", None)
 MOTION_ALARM_STR = os.getenv("MOTION_ALARM_STR", "MOTION DETECTED")
+MOTION_ALARM_UPPER_BOUND = os.getenv("MOTION_ALARM_UPPER_BOUND", 20)
+MOTION_ALARM_LOWER_BOUND = os.getenv("MOTION_ALARM_LOWER_BOUND", 6)
 
 def send_motion_alarm() -> None:
     """Send a motion alarm to Discord."""
@@ -44,7 +46,7 @@ def check_if_motion_alarm(timestamp: float) -> bool:
     dt = datetime.datetime.fromtimestamp(timestamp)
     
     # check if the time is between 8pm and 6am
-    if dt.hour >= 20 or dt.hour < 6:
+    if dt.hour >= MOTION_ALARM_UPPER_BOUND or dt.hour < MOTION_ALARM_LOWER_BOUND:
         return True
 
 def extract_data(message) -> tuple:
