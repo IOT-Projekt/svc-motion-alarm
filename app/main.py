@@ -46,6 +46,7 @@ def check_if_motion_alarm(timestamp: float) -> bool:
     dt = datetime.datetime.fromtimestamp(timestamp)
     
     # check if the time is between 8pm and 6am
+    logging.info(f"Checking if motion alarm should be sent. Hour: {dt.hour}, Upper bound: {MOTION_ALARM_UPPER_BOUND}, Lower bound: {MOTION_ALARM_LOWER_BOUND}")
     if dt.hour >= MOTION_ALARM_UPPER_BOUND or dt.hour < MOTION_ALARM_LOWER_BOUND:
         return True
 
