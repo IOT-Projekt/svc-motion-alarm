@@ -14,8 +14,8 @@ logging.basicConfig(level=logging.INFO)
 KAFKA_MOTION_TOPIC = os.getenv("KAFKA_MOTION_TOPIC", "motion")
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", None)
 MOTION_ALARM_STR = os.getenv("MOTION_ALARM_STR", "MOTION DETECTED")
-MOTION_ALARM_UPPER_BOUND = os.getenv("MOTION_ALARM_UPPER_BOUND", 20)
-MOTION_ALARM_LOWER_BOUND = os.getenv("MOTION_ALARM_LOWER_BOUND", 6)
+MOTION_ALARM_UPPER_BOUND = int(os.getenv("MOTION_ALARM_UPPER_BOUND", 20))
+MOTION_ALARM_LOWER_BOUND = int(os.getenv("MOTION_ALARM_LOWER_BOUND", 6))
 
 def send_motion_alarm() -> None:
     """Send a motion alarm to Discord."""
